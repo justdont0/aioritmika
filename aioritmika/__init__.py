@@ -1,4 +1,5 @@
 '''Штука для ботов в алге'''
+from typing import Literal
 from warnings import warn
 import asyncio
 import aiohttp
@@ -12,7 +13,7 @@ class Bot:
     password - Пароль для входа в алгу
     timeout - Задержка между проверками комментариев
     '''
-    def __init__(self, login: str, password: str, timeout: float = 5):
+    def __init__(self, login: str, password: str, prefix: str = "", account_type: Literal['basic', 'codehour', 'codeweek'] = 'basic', timeout: float = 5):
         '''
         Создать бота
 
