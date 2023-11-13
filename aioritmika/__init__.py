@@ -13,7 +13,7 @@ class Bot:
     password - Пароль для входа в алгу
     timeout - Задержка между проверками комментариев
     '''
-    def __init__(self, login: str, password: str, prefix: str = "", account_type: Literal['basic', 'codehour', 'codeweek'] = 'basic', timeout: float = 5):
+    def __init__(self, login: str, password: str, prefix: str = "", timeout: float = 5):
         '''
         Создать бота
 
