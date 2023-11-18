@@ -69,3 +69,12 @@ class Bot:
             return coro
         self.events[coro.__name__] = coro
         return coro
+    
+    def run(self, project_id: int):
+        '''
+        Запустить бота
+
+        Аргументы:
+        project_id - айди проекта, под которым будет работать бот
+        '''
+        pass
