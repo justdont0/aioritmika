@@ -1,9 +1,9 @@
 '''Штука для ботов в алге'''
-from typing import Literal
 from warnings import warn
 import asyncio
 import aiohttp
 import json
+from .errors import *
 
 class Bot:
     '''
@@ -41,11 +41,12 @@ class Bot:
             try: self.temp_storage = json.load(open(storage, 'r'))
             except: self.temp_storage = {}
         self.commands = {}
+        self.events = {}
         self.running = False
 
     def command(self, name: str|None = None):
         '''
-        Декоратор для добавления команды в бота
+        Декоратор для добавления команды в бота (вызывайте со скобками, типа @bot.command())
 
         Аргументы:
         name - Имя команды, если None - имя функции
@@ -54,3 +55,17 @@ class Bot:
             self.commands[self.prefix + (name if name is not None else coro.__name__)] = coro
             return coro
         return decor
+
+    def event(self, coro):
+        '''
+        Декоратор для обработки события вручную
+        (P.S.: при обработке on_message, обязательно используйте process_commands на сообщении)
+
+        Аргументы:
+        Их нет. Не используйте скобки, вызывая этот декоратор (@bot.event)
+        '''
+        if coro.__name__ not in ['on_message', 'on_ready']:
+            warn('В библиотеке нет этого события, поэтому оно не будет вызываться.', NonExistingEvent)
+            return coro
+        self.events[coro.__name__] = coro
+        return coro

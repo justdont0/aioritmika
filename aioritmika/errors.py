@@ -1,0 +1,1 @@
+class NonExistingEvent(UserWarning): pass
