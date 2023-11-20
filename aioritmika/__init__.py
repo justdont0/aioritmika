@@ -4,11 +4,13 @@ import asyncio
 import aiohttp
 import json
 from .errors import *
+from discord.ext import tasks
+
 
 class Bot:
     '''
     Ну да
-    
+
     Аргументы init:
     login - Логин для входа в алгу/имя бота
     password - Пароль для входа в алгу
@@ -16,7 +18,7 @@ class Bot:
     timeout - Задержка между проверками комментариев
     storage - Путь к файлу, куда будет сохраняться/загружаться информация об обработанных комментариях (чтобы один комментарий не обпабатывать дважды). Если None, хранит информацию в переменной (сбрасываеться при перезагрузке скрипта)
     '''
-    def __init__(self, login: str, password: str, prefix: str = "", timeout: float = 5, storage: str|None = 'aioritmika_data.json'):
+    def __init__(self, login: str, password: str, prefix: str = "", timeout: float = 5, storage: str | None = 'aioritmika_data.json'):
         '''
         Создать бота
 
@@ -27,9 +29,9 @@ class Bot:
         timeout - Задержка между проверками комментариев
         storage - Путь к файлу, куда будет сохраняться/загружаться информация об обработанных комментариях (чтобы один комментарий не обпабатывать дважды). Если None, хранит информацию в переменной (сбрасываеться при перезагрузке скрипта)
         '''
-        if type(login) != str:
+        if login is not str:
             raise TypeError('login is not `str`')
-        if type(password) != str:
+        if password is not str:
             raise TypeError('password is not `str`')
         self.login = login
         self.password = password
@@ -44,7 +46,7 @@ class Bot:
         self.events = {}
         self.running = False
 
-    def command(self, name: str|None = None):
+    def command(self, name: str | None = None):
         '''
         Декоратор для добавления команды в бота (вызывайте со скобками, типа @bot.command())
 
@@ -69,7 +71,7 @@ class Bot:
             return coro
         self.events[coro.__name__] = coro
         return coro
-    
+
     def run(self, project_id: int):
         '''
         Запустить бота
@@ -77,4 +79,7 @@ class Bot:
         Аргументы:
         project_id - айди проекта, под которым будет работать бот
         '''
-        pass
+        @tasks.loop(seconds=self.timeout)
+        async def dat_loop():
+            async with asyncio.Session() as s:
+                s.post('')
